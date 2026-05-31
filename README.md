@@ -160,10 +160,36 @@ npm run dev
 
 ---
 
+## 🧭 프로젝트 관리
+
+이 프로젝트는 **Agent(Claude Code) 기반 워크플로우**를 지속적으로 발전시키며, 3주 이후에도 유지 가능한 구조를 목표로 합니다.
+
+### 브랜치 전략
+```
+main      ← 안정 버전 (직접 push 금지, dev에서만 머지)
+ └─ dev   ← 통합 브랜치
+     └─ feature/*   ← 기능 단위 작업 → dev로 PR
+```
+
+### 운영 규칙
+| 항목 | 방식 |
+|---|---|
+| **Task 관리** | [GitHub Issues](https://github.com/boostcampwm-snu-2026-1/TenbaggerHunter-KwanghoKim/issues) — 기능 단위로 등록 |
+| **문서/기획** | [GitHub Wiki](https://github.com/boostcampwm-snu-2026-1/TenbaggerHunter-KwanghoKim/wiki) — 기획서·워크플로우 |
+| **PR 단위** | `feature/*` → `dev` (컴포넌트 단위 PR) |
+| **커밋** | Conventional Commits (`feat`/`fix`/`refactor`/`docs`/`chore`/`prompt`) |
+| **AI 컨텍스트** | [CLAUDE.md](./CLAUDE.md) 매 세션 갱신 |
+
+---
+
 ## 📚 문서
 
 - 📄 [Product Requirements Document (PRD)](./PRD.md) — 전체 제품 명세
-- 🤖 [AI 개발 워크플로우](./AI-WORKFLOW.md) — Claude Code 기반 AI Native 개발 방식
+- 🤖 [AI 개발 워크플로우](./AI-WORKFLOW.md) — Claude Code 기반 AI Native 개발 철학
+- 🧩 [Agent 워크플로우 가이드](./docs/agent-workflow.md) — 작업 단위 / 프롬프트 패턴 / 검증 체크포인트
+- ✍️ [커밋 컨벤션](./docs/commit-convention.md) — Conventional Commits 규칙
+- 🧠 [CLAUDE.md](./CLAUDE.md) — AI 컨텍스트 허브
+- ⚙️ [.claude/](./.claude/) — 커스텀 슬래시 커맨드 + Agent Skill
 
 ---
 
