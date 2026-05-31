@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 Ten Bagger Finder
+# 🚀 Tenbagger Hunter
 
 ### AI 기반 글로벌 주식 리서치 어시스턴트
 
@@ -18,18 +18,18 @@
 
 ## 💡 무엇인가요?
 
-Ten Bagger Finder는 단순한 주식 스크리너가 아닙니다.
+Tenbagger Hunter는 단순한 주식 스크리너가 아닙니다.
 
 사용자가 입력한 **자연어 테마**를 AI가 해석해 10배(*ten bagger*) 상승 가능성이 있는 기업 후보를 발굴하고, **왜 그 기업인지**를 내러티브와 데이터로 통합해 설명합니다. 한국과 미국 시장을 함께 다룹니다.
 
 > _"AI 데이터센터 전력 인프라"_ 라고 입력하면 →
-> 관련 기업 5~8개 + 각 기업의 Ten Bagger Score + Bull/Bear/Verdict 리포트를 받습니다.
+> 관련 기업 5~8개 + 각 기업의 Tenbagger Score + Bull/Bear/Verdict 리포트를 받습니다.
 
 ---
 
 ## ✨ 기존 스크리너와 무엇이 다른가요?
 
-| 기존 스크리너 (Finviz, HTS) | **Ten Bagger Finder** |
+| 기존 스크리너 (Finviz, HTS) | **Tenbagger Hunter** |
 |---|---|
 | 🔢 숫자 필터링 | 💬 자연어 테마 탐색 |
 | 📋 결과 나열 | 📖 Bull / Bear / Verdict 스토리텔링 |
@@ -49,7 +49,7 @@ Ten Bagger Finder는 단순한 주식 스크리너가 아닙니다.
 "Palantir처럼 B2G SaaS인데 아직 덜 알려진 곳"
 ```
 
-### 📊 F-02. Ten Bagger Score 카드 `P0`
+### 📊 F-02. Tenbagger Score 카드 `P0`
 기업당 **5개 축**으로 0~100점을 산출해 시각화합니다.
 
 | 축 | 설명 | 가중치 |
@@ -72,7 +72,7 @@ Ten Bagger Finder는 단순한 주식 스크리너가 아닙니다.
 - **F-05. Watchlist & 히스토리** — 기업 저장, Score 변화 타임라인, 투자 thesis 메모
 - **F-06. 비교 모드** — 같은 테마 내 2개 기업 나란히 비교 + 지표별 승/패 하이라이트
 - **F-07. 데일리 픽 피드** — AI가 매일 1개 기업 발굴 + 푸시 알림
-- **F-08. 소셜 공유 카드** — "오늘 발견한 Ten Bagger 후보" 이미지 자동 생성
+- **F-08. 소셜 공유 카드** — "오늘 발견한 Tenbagger 후보" 이미지 자동 생성
 
 </details>
 

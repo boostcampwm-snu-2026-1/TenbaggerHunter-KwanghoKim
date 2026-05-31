@@ -1,5 +1,5 @@
 # AI Development Workflow
-# Ten Bagger Finder × Claude Code
+# Tenbagger Hunter × Claude Code
 
 **Version:** 0.1  
 **Last Updated:** 2026-05-31
@@ -22,7 +22,7 @@
 ## 2. 프로젝트 구조
 
 ```
-ten-bagger-finder/
+tenbagger-hunter/
 ├── CLAUDE.md                        ← AI 컨텍스트 허브 (항상 최신화)
 ├── PRD.md                           ← 제품 요구사항
 ├── AI-WORKFLOW.md                   ← 이 파일
@@ -52,7 +52,7 @@ ten-bagger-finder/
 │
 ├── lib/
 │   ├── ai/
-│   │   ├── analyzer.ts              ← Ten Bagger Score 로직
+│   │   ├── analyzer.ts              ← Tenbagger Score 로직
 │   │   ├── bull-bear.ts             ← Bull/Bear/Verdict 생성
 │   │   └── prompts/                 ← 프롬프트 템플릿
 │   │       ├── theme-search.ts
@@ -82,10 +82,10 @@ ten-bagger-finder/
 ### 초기 CLAUDE.md 템플릿
 
 ```markdown
-# Ten Bagger Finder — Project Context
+# Tenbagger Hunter — Project Context
 
 ## 앱 개요
-AI 기반 글로벌 주식 Ten Bagger 후보 탐색 도구.
+AI 기반 글로벌 주식 Tenbagger 후보 탐색 도구.
 한국주(DART/KRX) + 미국주(FMP/SEC) 통합.
 자연어 테마 입력 → 기업 후보 발굴 → Bull/Bear/Verdict 분석.
 
@@ -115,7 +115,7 @@ SUPABASE_SERVICE_ROLE_KEY
 - [ ] 프로젝트 scaffold
 - [ ] FMP API wrapper + 캐싱
 - [ ] 테마 탐색 프롬프트 v1
-- [ ] Ten Bagger Score 알고리즘 v1
+- [ ] Tenbagger Score 알고리즘 v1
 - [ ] Bull/Bear/Verdict UI
 
 ### Phase 2 (한국주)
@@ -274,7 +274,7 @@ Phase 완료 시 리뷰:
 
 ```
 "lib/ai/analyzer.ts 읽어봐.
- Ten Bagger Score 계산 로직이 너무 길어진 것 같아.
+ Tenbagger Score 계산 로직이 너무 길어진 것 같아.
  어떻게 분리하면 좋을지 제안해줘.
  성능 영향은 없어야 해."
 ```
@@ -402,7 +402,7 @@ prompt: Claude API 프롬프트 변경
 npm install -g @anthropic-ai/claude-code
 
 # 2. 프로젝트 생성
-npx create-next-app@latest ten-bagger-finder --typescript --tailwind --app
+npx create-next-app@latest tenbagger-hunter --typescript --tailwind --app
 
 # 3. 의존성 설치
 npm install @anthropic-ai/sdk @supabase/supabase-js recharts
@@ -413,7 +413,7 @@ cp .env.example .env.local
 # ANTHROPIC_API_KEY, FMP_API_KEY, DART_API_KEY, SUPABASE_* 입력
 
 # 5. Claude Code 실행
-cd ten-bagger-finder
+cd tenbagger-hunter
 claude
 ```
 
