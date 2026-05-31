@@ -187,6 +187,7 @@ main      ← 안정 버전 (직접 push 금지, dev에서만 머지)
 - 📄 [Product Requirements Document (PRD)](./PRD.md) — 전체 제품 명세
 - 🤖 [AI 개발 워크플로우](./AI-WORKFLOW.md) — Claude Code 기반 AI Native 개발 철학
 - 🧩 [Agent 워크플로우 가이드](./docs/agent-workflow.md) — 작업 단위 / 프롬프트 패턴 / 검증 체크포인트
+- ✍️ [커밋 컨벤션](./docs/commit-convention.md) — Conventional Commits 규칙
 - 🧠 [CLAUDE.md](./CLAUDE.md) — AI 컨텍스트 허브
 - ⚙️ [.claude/](./.claude/) — 커스텀 슬래시 커맨드 + Agent Skill
 

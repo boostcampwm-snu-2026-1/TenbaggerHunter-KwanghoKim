@@ -26,7 +26,7 @@ AI 기반 글로벌 주식 Ten Bagger 후보 탐색 도구.
 
 ## 개발 관리 규칙
 - 브랜치: `main` ← `dev` ← `feature/*` (feature → dev PR, 직접 main push 금지)
-- 커밋: Conventional Commits (`feat`/`fix`/`refactor`/`docs`/`chore`/`prompt`)
+- 커밋: Conventional Commits — 규칙 단일 소스 [docs/commit-convention.md](./docs/commit-convention.md) (Agent는 `commit` Skill로 자동 적용)
 - Task: GitHub Issue로 등록·관리
 - 문서: 기획/워크플로우는 GitHub Wiki, 코드 관련 결정은 `docs/`
 
