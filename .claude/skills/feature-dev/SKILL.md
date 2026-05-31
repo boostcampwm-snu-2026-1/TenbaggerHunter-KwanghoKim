@@ -1,11 +1,11 @@
 ---
 name: feature-dev
-description: Ten Bagger Finder의 기능을 표준 워크플로우로 개발한다. 사용자가 새 기능/컴포넌트/API를 추가하거나, 작업을 어떻게 쪼갤지, 어떤 순서로 진행할지 물을 때 사용한다.
+description: Tenbagger Hunter의 기능을 표준 워크플로우로 개발한다. 사용자가 새 기능/컴포넌트/API를 추가하거나, 작업을 어떻게 쪼갤지, 어떤 순서로 진행할지 물을 때 사용한다.
 ---
 
 # Feature Development Skill
 
-Ten Bagger Finder의 기능을 일관된 흐름으로 개발하기 위한 스킬이다.
+Tenbagger Hunter의 기능을 일관된 흐름으로 개발하기 위한 스킬이다.
 세부 기준은 [docs/agent-workflow.md](../../../docs/agent-workflow.md)를 단일 소스로 따른다.
 
 ## 언제 쓰나
