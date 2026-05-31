@@ -1,12 +1,12 @@
-# Ten Bagger Finder — Project Context
+# Tenbagger Hunter — Project Context
 
 > 이 문서는 Claude Code가 매 세션마다 읽는 살아있는 컨텍스트 허브다.
 > 작업할 때마다 "현재 진행 상황 / 최근 결정 사항 / 알려진 이슈"를 업데이트한다.
 
 ## 앱 개요
-AI 기반 글로벌 주식 Ten Bagger 후보 탐색 도구.
+AI 기반 글로벌 주식 Tenbagger 후보 탐색 도구.
 한국주(DART/KRX) + 미국주(FMP/SEC) 통합.
-자연어 테마 입력 → 기업 후보 발굴 → Ten Bagger Score + Bull/Bear/Verdict 분석.
+자연어 테마 입력 → 기업 후보 발굴 → Tenbagger Score + Bull/Bear/Verdict 분석.
 
 상세 명세: [PRD.md](./PRD.md) · 개발 워크플로우: [AI-WORKFLOW.md](./AI-WORKFLOW.md) · [docs/agent-workflow.md](./docs/agent-workflow.md)
 
@@ -53,7 +53,7 @@ SUPABASE_SERVICE_ROLE_KEY
 - [ ] 프로젝트 scaffold (Next.js + Supabase)
 - [ ] FMP API wrapper + 캐싱
 - [ ] 테마 탐색 프롬프트 v1
-- [ ] Ten Bagger Score 알고리즘 v1
+- [ ] Tenbagger Score 알고리즘 v1
 - [ ] Bull/Bear/Verdict UI
 
 ## 최근 결정 사항

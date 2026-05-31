@@ -1,6 +1,6 @@
 # Commit Convention
 
-> Ten Bagger Finder의 커밋 규칙. [Conventional Commits](https://www.conventionalcommits.org/) 기반.
+> Tenbagger Hunter의 커밋 규칙. [Conventional Commits](https://www.conventionalcommits.org/) 기반.
 > Agent(Claude Code)가 커밋할 때 자동 적용한다 → [.claude/skills/commit/SKILL.md](../.claude/skills/commit/SKILL.md)
 
 ## 1. 형식

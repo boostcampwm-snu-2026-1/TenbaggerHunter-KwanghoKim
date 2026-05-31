@@ -5,7 +5,7 @@ description: 변경 사항을 이 프로젝트의 커밋 규칙(Conventional Com
 
 # Commit Skill
 
-변경 사항을 Ten Bagger Finder의 커밋 규칙에 맞춰 커밋한다.
+변경 사항을 Tenbagger Hunter의 커밋 규칙에 맞춰 커밋한다.
 규칙의 단일 소스는 [docs/commit-convention.md](../../../docs/commit-convention.md) — 항상 이를 따른다.
 
 ## 절차
