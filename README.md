@@ -132,10 +132,10 @@ Tenbagger Hunter는 단순한 주식 스크리너가 아닙니다.
 
 | Phase | 목표 | 기간 |
 |:---:|---|:---:|
-| **1** | MVP (미국주) — scaffold, FMP wrapper, 테마 탐색, Score v1, Bull/Bear UI | `2주` |
-| **2** | 한국주 추가 — DART/KRX 연동, Adapter 패턴 통일, Watchlist DB | `+1주` |
-| **3** | 고도화 — 재무 차트, 뉴스 통합, 비교 모드, UI 디자인 | `+1주` |
-| **4** | 배포 준비 — 소셜 카드, 데일리 픽, 인증, 모니터링 | `필요시` |
+| **1** | MVP (미국주) — scaffold, FMP wrapper, 테마 탐색, Score v1, Bull/Bear UI | `2주차` |
+| **2** | 한국주 추가 — DART/KRX 연동, Adapter 패턴 통일, Watchlist DB | `2주차` |
+| **3** | 고도화 — 재무 차트, 뉴스 통합, 비교 모드, UI 디자인 | `3주차` |
+| **4** | 배포 준비 — 소셜 카드, 데일리 픽, 인증, 모니터링 | `3주차` |
 
 > 상세 작업 목록은 [PRD.md](./PRD.md#7-개발-로드맵) 참고
 
