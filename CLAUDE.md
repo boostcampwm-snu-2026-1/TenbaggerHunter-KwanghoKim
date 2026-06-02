@@ -49,15 +49,24 @@ SUPABASE_SERVICE_ROLE_KEY
 - [ ] GitHub Wiki 기획서·워크플로우 정리
 - [ ] GitHub Issue로 Task 등록
 
-### Phase 1 — 미국주 MVP (예정)
-- [ ] 프로젝트 scaffold (Next.js + Supabase)
-- [ ] FMP API wrapper + 캐싱
-- [ ] 테마 탐색 프롬프트 v1
-- [ ] Tenbagger Score 알고리즘 v1
-- [ ] Bull/Bear/Verdict UI
+### Phase 1 — 미국주 MVP (진행 중, branch: feature/phase-1-mvp)
+- [x] 프로젝트 scaffold (Next.js 14 App Router + TS + Tailwind)
+- [x] FMP API wrapper + 캐싱 레이어 (mock 우선, TTL 정책 `lib/cache`)
+- [x] 테마 탐색 프롬프트 v1 (`lib/ai/prompts`, 버전 로그 `docs/prompts.md`)
+- [x] Tenbagger Score 알고리즘 v1 (`lib/score`, 가중치 25/20/15/25/15)
+- [x] Bull/Bear/Verdict 프롬프트 v1 + 딥다이브 UI (레이더/재무/분석)
+- [x] AI provider 추상화 (`lib/ai`: mock|cli|api 스위칭)
+- [ ] Supabase 실연동 (현재 in-memory mock 캐시)
+- [ ] 실 API(FMP/Claude) 응답 스키마 실데이터 검증 (체크포인트 3.2)
+
+> mock으로 end-to-end 동작 확인 완료 (`AI_PROVIDER=mock`): 랜딩 → `/search` → `/company/[ticker]`.
+> typecheck/build 통과. 실행: `AI_PROVIDER=mock npm run dev`
 
 ## 최근 결정 사항
 - 2026-05-31: 한국/미국 주식은 Adapter 패턴으로 통합 (ADR-001 예정)
+- 2026-06-02: AI 호출은 provider 추상화(`lib/ai`)로 mock|cli|api 전환. 개발은 `cli`(claude -p, 구독 quota) 또는 `mock`, 프로덕션은 `api`.
+- 2026-06-02: 캐싱은 read-through(`lib/cache`), TTL은 PRD §4.3. Supabase 백엔드는 미연동(in-memory).
 
 ## 알려진 이슈
-(작업하면서 업데이트)
+- `@anthropic-ai/sdk`는 prompt caching GA 위해 ^0.100 사용 (초기 0.30 → 업그레이드).
+- Supabase/FMP/Claude 실연동 미검증 — 현재 전 구간 mock 경로만 실행됨.
