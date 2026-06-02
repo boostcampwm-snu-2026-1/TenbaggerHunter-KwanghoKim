@@ -13,9 +13,9 @@ const SUGGESTED = [
 ];
 
 const MARKETS: { value: Market | "ALL"; label: string }[] = [
-  { value: "US", label: "미국주" },
-  { value: "KR", label: "한국주" },
-  { value: "ALL", label: "전체" },
+  { value: "US", label: "US" },
+  { value: "KR", label: "KR" },
+  { value: "ALL", label: "ALL" },
 ];
 
 export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }) {
@@ -30,38 +30,45 @@ export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-1.5">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           go(theme);
         }}
-        className="flex gap-2"
+        className="flex items-stretch gap-1"
       >
-        <input
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-          placeholder="테마나 키워드를 자유롭게 입력하세요"
-          className="flex-1 rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-3 text-sm outline-none focus:border-neutral-400"
-        />
+        <div className="bevel-in flex flex-1 items-stretch bg-term-bg">
+          <span className="flex select-none items-center px-1.5 text-sm font-bold text-term-accent">
+            {">"}
+          </span>
+          <input
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            placeholder="THEME / KEYWORD 입력 후 ENTER"
+            spellCheck={false}
+            className="flex-1 bg-transparent py-1.5 text-[12px] text-term-white outline-none placeholder:text-term-faint"
+          />
+        </div>
         <button
           type="submit"
-          className="rounded-lg bg-neutral-100 px-5 py-3 text-sm font-semibold text-neutral-900 hover:bg-white"
+          className="bevel bg-term-accent px-3 text-[11px] font-bold uppercase tracking-widest text-black active:translate-y-px"
         >
-          탐색
+          RUN
         </button>
       </form>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex items-center gap-1 text-[10px]">
+        <span className="text-term-faint">MKT</span>
         {MARKETS.map((m) => (
           <button
             key={m.value}
             onClick={() => setMarket(m.value)}
             className={cn(
-              "rounded-full border px-3 py-1 text-xs",
+              "bevel px-1.5 py-px font-bold uppercase tracking-widest",
               market === m.value
-                ? "border-neutral-100 bg-neutral-100 text-neutral-900"
-                : "border-neutral-700 text-neutral-400 hover:border-neutral-500",
+                ? "bg-term-accent text-black"
+                : "bg-term-chrome text-term-muted hover:text-term-white",
             )}
           >
             {m.label}
@@ -69,7 +76,7 @@ export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-2 pt-2">
+      <div className="flex flex-wrap gap-1 pt-0.5">
         {SUGGESTED.map((s) => (
           <button
             key={s}
@@ -77,7 +84,7 @@ export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }
               setTheme(s);
               go(s);
             }}
-            className="rounded-full border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs text-neutral-300 hover:border-neutral-600"
+            className="border border-term-grid bg-term-bg px-1.5 py-0.5 text-left text-[10px] text-term-muted hover:border-term-accent-dim hover:text-term-fg"
           >
             {s}
           </button>

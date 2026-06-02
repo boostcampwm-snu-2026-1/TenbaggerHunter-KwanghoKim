@@ -11,11 +11,11 @@ import {
 import type { ScoreAxes } from "@/lib/types/stock";
 
 const LABELS: Record<keyof ScoreAxes, string> = {
-  tam: "TAM 침투율",
-  moat: "해자 강도",
-  management: "경영진 신뢰",
-  financials: "재무 건전성",
-  narrative: "내러티브",
+  tam: "TAM",
+  moat: "MOAT",
+  management: "MGMT",
+  financials: "FIN",
+  narrative: "NARR",
 };
 
 export function ScoreRadar({ axes }: { axes: ScoreAxes }) {
@@ -25,13 +25,21 @@ export function ScoreRadar({ axes }: { axes: ScoreAxes }) {
   }));
 
   return (
-    <div className="h-72 w-full">
+    <div className="h-60 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart data={data} outerRadius="70%">
-          <PolarGrid stroke="#404040" />
-          <PolarAngleAxis dataKey="axis" tick={{ fill: "#a3a3a3", fontSize: 11 }} />
+          <PolarGrid stroke="var(--term-border)" />
+          <PolarAngleAxis
+            dataKey="axis"
+            tick={{ fill: "var(--term-accent)", fontSize: 10, fontFamily: "var(--font-mono)" }}
+          />
           <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
-          <Radar dataKey="value" stroke="#34d399" fill="#34d399" fillOpacity={0.35} />
+          <Radar
+            dataKey="value"
+            stroke="var(--term-up)"
+            fill="var(--term-up)"
+            fillOpacity={0.3}
+          />
         </RadarChart>
       </ResponsiveContainer>
     </div>

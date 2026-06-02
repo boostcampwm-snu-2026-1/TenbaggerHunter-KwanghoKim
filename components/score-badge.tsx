@@ -1,23 +1,23 @@
 import { cn } from "@/lib/utils/cn";
 
 function tone(score: number): string {
-  if (score >= 75) return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
-  if (score >= 55) return "bg-amber-500/15 text-amber-400 border-amber-500/30";
-  return "bg-neutral-500/15 text-neutral-400 border-neutral-500/30";
+  if (score >= 75) return "bg-term-up/15 text-term-up border-term-up/40";
+  if (score >= 55) return "bg-term-accent/15 text-term-accent border-term-accent-dim";
+  return "bg-term-elevated text-term-muted border-term-border";
 }
 
 export function ScoreBadge({ score, size = "md" }: { score: number; size?: "md" | "lg" }) {
   return (
     <div
       className={cn(
-        "inline-flex flex-col items-center justify-center rounded-xl border font-bold tabular-nums",
+        "inline-flex flex-col items-center justify-center border font-bold tabular-nums term-glow",
         tone(score),
-        size === "lg" ? "h-20 w-20 text-3xl" : "h-12 w-12 text-lg",
+        size === "lg" ? "h-16 w-16 text-2xl" : "h-10 w-10 text-base",
       )}
     >
       {score}
-      <span className={cn("font-normal", size === "lg" ? "text-[10px]" : "text-[8px]")}>
-        SCORE
+      <span className={cn("font-normal tracking-widest", size === "lg" ? "text-[9px]" : "text-[7px]")}>
+        SCR
       </span>
     </div>
   );
