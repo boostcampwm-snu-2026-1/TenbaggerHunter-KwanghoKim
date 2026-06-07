@@ -54,28 +54,30 @@ export async function searchTheme(
     });
     const { candidates } = themeSearchSchema.parse(raw);
 
-    const resolved = await Promise.all(
-      candidates.map(async (c) => {
-        const financials = (await getFinancials(c.ticker)) ?? {};
-        const qual = {
-          tam: normalizeQualitative(c.axes.tam),
-          moat: normalizeQualitative(c.axes.moat),
-          management: normalizeQualitative(c.axes.management),
-          narrative: normalizeQualitative(c.axes.narrative),
-        };
-        const candidate: CompanyCandidate = {
-          profile: {
-            ticker: c.ticker,
-            name: c.name,
-            market: market === "KR" ? "KR" : "US",
-            sector: c.sector,
-          },
-          score: buildScore(axesFrom(qual, computeFinancialScore(financials))),
-          oneLiner: c.oneLiner,
-        };
-        return candidate;
-      }),
-    );
+    // 트레이드오프: 리스트는 "예비 점수"만 계산한다.
+    // 후보별 FMP 실 재무 호출(getFinancials)을 하지 않는다 — FMP 무료 티어 250 req/day인데
+    // 후보당 3콜 × 5~8개면 검색 1회에 ~24콜이라 쿼터를 빠르게 소진하기 때문.
+    // 따라서 재무 축은 computeFinancialScore({})(=50, 중립)로 두고, 정성 축(AI)만 반영한다.
+    // 실 재무가 반영된 정밀 점수는 getDeepDive(기업 상세)에서만 계산한다.
+    const resolved = candidates.map((c) => {
+      const qual = {
+        tam: normalizeQualitative(c.axes.tam),
+        moat: normalizeQualitative(c.axes.moat),
+        management: normalizeQualitative(c.axes.management),
+        narrative: normalizeQualitative(c.axes.narrative),
+      };
+      const candidate: CompanyCandidate = {
+        profile: {
+          ticker: c.ticker,
+          name: c.name,
+          market: market === "KR" ? "KR" : "US",
+          sector: c.sector,
+        },
+        score: buildScore(axesFrom(qual, computeFinancialScore({}))),
+        oneLiner: c.oneLiner,
+      };
+      return candidate;
+    });
     return { theme, candidates: resolved };
   });
 }
