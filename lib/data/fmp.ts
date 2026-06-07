@@ -20,7 +20,17 @@ async function fmpGet<T>(path: string): Promise<T> {
 }
 
 export async function getProfile(ticker: string): Promise<CompanyProfile | null> {
-  if (useMock()) return getMockCompany(ticker)?.profile ?? null;
+  if (useMock()) {
+    // FMP 키가 없을 때: mock 기업이면 그 프로필, 아니면 티커 기반 최소 프로필로 폴백.
+    // (AI가 고른 임의 티커도 딥다이브가 열리도록 — 재무는 비고, 분석은 AI가 채운다)
+    return (
+      getMockCompany(ticker)?.profile ?? {
+        ticker: ticker.toUpperCase(),
+        name: ticker.toUpperCase(),
+        market: "US" as const,
+      }
+    );
+  }
 
   return cached(`fmp:profile:${ticker}`, TTL.quote, async () => {
     const [p] = await fmpGet<
