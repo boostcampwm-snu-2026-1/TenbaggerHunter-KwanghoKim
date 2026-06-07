@@ -3,13 +3,16 @@ import { TTL, cached } from "@/lib/cache";
 import { getMockCompany } from "@/lib/data/mock";
 
 /**
- * 미국주 데이터 어댑터 (FMP). CLAUDE.md 원칙 #2,#3,#4.
+ * 미국주 데이터 어댑터 (FMP stable API). CLAUDE.md 원칙 #2,#3,#4.
  *
  * FMP_API_KEY 미설정 시 mock 데이터로 폴백 → 개발 중 쿼터(250 req/day) 소모 0.
  * 모든 실 호출은 캐싱(read-through)으로 감싼다.
+ *
+ * 주의: 2025-08-31 이후 신규 키는 구(v3) 엔드포인트가 막혀 `stable` API만 사용 가능.
+ * 엔드포인트는 `?symbol=` 쿼리 형식.
  */
 
-const FMP_BASE = "https://financialmodelingprep.com/api/v3";
+const FMP_BASE = "https://financialmodelingprep.com/stable";
 const useMock = () => !process.env.FMP_API_KEY;
 
 async function fmpGet<T>(path: string): Promise<T> {
@@ -34,15 +37,15 @@ export async function getProfile(ticker: string): Promise<CompanyProfile | null>
 
   return cached(`fmp:profile:${ticker}`, TTL.quote, async () => {
     const [p] = await fmpGet<
-      { symbol: string; companyName: string; sector?: string; mktCap?: number; description?: string }[]
-    >(`/profile/${ticker}`);
+      { symbol: string; companyName: string; sector?: string; marketCap?: number; description?: string }[]
+    >(`/profile?symbol=${ticker}`);
     if (!p) return null;
     return {
       ticker: p.symbol,
       name: p.companyName,
       market: "US" as const,
       sector: p.sector,
-      marketCap: p.mktCap,
+      marketCap: p.marketCap,
       description: p.description,
     };
   });
@@ -52,23 +55,29 @@ export async function getFinancials(ticker: string): Promise<Financials | null> 
   if (useMock()) return getMockCompany(ticker)?.financials ?? null;
 
   return cached(`fmp:financials:${ticker}`, TTL.financialsAnnual, async () => {
-    const income = await fmpGet<
-      { calendarYear: string; revenue: number; operatingIncome: number }[]
-    >(`/income-statement/${ticker}?period=annual&limit=5`);
-    const [ratios] = await fmpGet<
-      { freeCashFlowPerShare?: number; debtEquityRatio?: number }[]
-    >(`/ratios-ttm/${ticker}`);
-    const [growth] = await fmpGet<{ revenueGrowth?: number }[]>(
-      `/financial-growth/${ticker}?period=annual&limit=1`,
-    );
+    const [income, ratios, cashflow] = await Promise.all([
+      fmpGet<{ fiscalYear: string; revenue: number; operatingIncome: number }[]>(
+        `/income-statement?symbol=${ticker}&period=annual&limit=5`,
+      ),
+      fmpGet<{ debtToEquityRatioTTM?: number }[]>(`/ratios-ttm?symbol=${ticker}`),
+      fmpGet<{ freeCashFlow?: number }[]>(
+        `/cash-flow-statement?symbol=${ticker}&period=annual&limit=1`,
+      ),
+    ]);
 
     const latest = income[0];
+    const prev = income[1];
+    // 성장률은 별도 엔드포인트 대신 매출 2개년으로 계산 (쿼터 절약)
+    const revenueGrowth =
+      latest && prev && prev.revenue ? (latest.revenue - prev.revenue) / prev.revenue : undefined;
+
     return {
-      revenueGrowth: growth?.revenueGrowth,
-      debtToEquity: ratios?.debtEquityRatio,
-      operatingMargin: latest ? latest.operatingIncome / latest.revenue : undefined,
+      revenueGrowth,
+      debtToEquity: ratios[0]?.debtToEquityRatioTTM,
+      freeCashFlow: cashflow[0]?.freeCashFlow,
+      operatingMargin: latest && latest.revenue ? latest.operatingIncome / latest.revenue : undefined,
       revenueHistory: income
-        .map((r) => ({ year: Number(r.calendarYear), revenue: r.revenue }))
+        .map((r) => ({ year: Number(r.fiscalYear), revenue: r.revenue }))
         .reverse(),
     };
   });
