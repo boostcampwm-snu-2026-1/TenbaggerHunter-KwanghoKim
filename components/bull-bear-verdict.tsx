@@ -1,4 +1,5 @@
 import type { Analysis, InvestorType } from "@/lib/types/stock";
+import { Panel, Tag } from "@/components/terminal";
 
 const INVESTOR_LABEL: Record<InvestorType, string> = {
   "long-hold": "장기보유",
@@ -6,41 +7,56 @@ const INVESTOR_LABEL: Record<InvestorType, string> = {
   watch: "관망",
 };
 
-function CaseList({ title, items, tone }: { title: string; items: string[]; tone: "bull" | "bear" }) {
+const INVESTOR_TONE: Record<InvestorType, "up" | "warn" | "info"> = {
+  "long-hold": "up",
+  momentum: "warn",
+  watch: "info",
+};
+
+function CaseList({
+  title,
+  items,
+  tone,
+}: {
+  title: string;
+  items: string[];
+  tone: "up" | "down";
+}) {
+  const head = tone === "up" ? "▲ BULL CASE" : "▼ BEAR CASE";
+  const numColor = tone === "up" ? "text-term-up" : "text-term-down";
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-4">
-      <h3 className={tone === "bull" ? "font-semibold text-emerald-400" : "font-semibold text-red-400"}>
-        {tone === "bull" ? "🟢 Bull Case" : "🔴 Bear Case"}
-        <span className="ml-2 text-xs font-normal text-neutral-500">{title}</span>
-      </h3>
-      <ul className="mt-3 space-y-2 text-sm text-neutral-300">
+    <Panel title={head} code={title}>
+      <ul className="space-y-1 text-[11px] leading-snug text-term-white">
         {items.map((it, i) => (
-          <li key={i} className="flex gap-2">
-            <span className="text-neutral-600">{i + 1}.</span>
+          <li key={i} className="flex gap-1.5">
+            <span className={`shrink-0 font-bold tabular-nums ${numColor}`}>
+              {i + 1})
+            </span>
             <span>{it}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </Panel>
   );
 }
 
 export function BullBearVerdict({ analysis }: { analysis: Analysis }) {
+  const vt = analysis.verdict.investorType;
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-2">
-        <CaseList title="성장 드라이버" items={analysis.bull} tone="bull" />
-        <CaseList title="리스크 팩터" items={analysis.bear} tone="bear" />
+    <div className="space-y-1">
+      <div className="grid gap-1 md:grid-cols-2">
+        <CaseList title="성장 드라이버" items={analysis.bull} tone="up" />
+        <CaseList title="리스크 팩터" items={analysis.bear} tone="down" />
       </div>
-      <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4">
-        <h3 className="font-semibold">
-          ⚖️ Verdict
-          <span className="ml-2 rounded bg-neutral-800 px-2 py-0.5 text-xs font-normal text-neutral-300">
-            {INVESTOR_LABEL[analysis.verdict.investorType]}
-          </span>
-        </h3>
-        <p className="mt-2 text-sm text-neutral-300">{analysis.verdict.summary}</p>
-      </div>
+      <Panel title="⚖ VERDICT" code="REC">
+        <div className="flex items-center gap-2">
+          <Tag tone={INVESTOR_TONE[vt]}>{INVESTOR_LABEL[vt]}</Tag>
+          <span className="text-[10px] text-term-faint">INVESTOR PROFILE</span>
+        </div>
+        <p className="mt-1 text-[11px] leading-snug text-term-white">
+          {analysis.verdict.summary}
+        </p>
+      </Panel>
     </div>
   );
 }

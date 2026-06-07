@@ -23,6 +23,9 @@ AI 기반 글로벌 주식 Tenbagger 후보 탐색 도구.
 3. 한국주/미국주 처리 로직은 Adapter 패턴으로 통일 (공통 타입: `lib/types/stock.ts`)
 4. 개발 중에는 `lib/data/mock/`의 mock data 우선 사용
 5. 에러는 사용자에게 graceful하게 표시
+6. **모든 UI는 Bloomberg Terminal 디자인 시스템([docs/DESIGN.md](./docs/DESIGN.md))을 따른다.**
+   색/여백/폰트/모서리는 `term-*` 토큰만 사용 — raw hex·`neutral-*`·`rounded-*` 금지.
+   화면은 `components/terminal/` 프리미티브(`Panel`/`DataRow`/`Delta`/`Tag`)를 우선 조립한다.
 
 ## 개발 관리 규칙
 - 브랜치: `main` ← `dev` ← `feature/*` (feature → dev PR, 직접 main push 금지)
@@ -66,6 +69,7 @@ SUPABASE_SERVICE_ROLE_KEY
 - 2026-05-31: 한국/미국 주식은 Adapter 패턴으로 통합 (ADR-001 예정)
 - 2026-06-02: AI 호출은 provider 추상화(`lib/ai`)로 mock|cli|api 전환. 개발은 `cli`(claude -p, 구독 quota) 또는 `mock`, 프로덕션은 `api`.
 - 2026-06-02: 캐싱은 read-through(`lib/cache`), TTL은 PRD §4.3. Supabase 백엔드는 미연동(in-memory).
+- 2026-06-02: UI는 Bloomberg Terminal(classic GUI) 컨셉으로 전면 통일. 규칙·토큰 단일소스 [docs/DESIGN.md](./docs/DESIGN.md), 정본 레퍼런스 `docs/design/bloomberg-reference-3.png`. 프리미티브 `components/terminal/*`(Panel/DataRow/ColHead/Delta/Tag/Cell/Sparkline/Bar/LineChartPanel/TopToolbar/CommandLine). 전 화면(랜딩·검색·딥다이브) 적용 완료, 토큰 위반 0.
 
 ## 알려진 이슈
 - `@anthropic-ai/sdk`는 prompt caching GA 위해 ^0.100 사용 (초기 0.30 → 업그레이드).
