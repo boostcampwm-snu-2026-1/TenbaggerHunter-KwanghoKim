@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * ─────────────────────────────────────────────────────────────
+ * TENBAGGER HUNTER — Bloomberg Terminal (classic GUI 재현)
+ * 레퍼런스: docs/design/bloomberg-reference-3.png
+ * 디자인 토큰의 단일 소스(SSOT). raw hex 금지 — term-* 토큰만.
+ * 컨셉: Win95 베벨 + 네이비 타이틀바 + 검정 데이터 + 주황 헤더.
+ *       크리스프 LCD(글로우/스캔라인 없음), 초고밀도.
+ * ─────────────────────────────────────────────────────────────
+ */
+:root {
+  color-scheme: dark;
+
+  /* surfaces */
+  --term-bg: #000000;          /* 데이터 영역 바탕 (검정) */
+  --term-panel: #000000;       /* 패널 본문 바탕 */
+  --term-navy: #1c1cae;        /* 타이틀바 / 네비 (로열 블루) */
+  --term-navy-dk: #0a0a52;     /* 강조 행 / sunken */
+  --term-chrome: #2a2a30;      /* 툴바 / 데스크톱 베이스 */
+  --term-elevated: #14141c;    /* 미세 강조 배경 */
+  --term-grid: #20202c;        /* faint 그리드라인 */
+  --term-border: #44444f;      /* 베벨 기준 테두리 */
+
+  /* bevel (Win95 3D) */
+  --term-bevel-lt: #7a7a86;    /* 입체 하이라이트 (top-left) */
+  --term-bevel-dk: #050508;    /* 입체 그림자 (bottom-right) */
+
+  /* signature orange — 헤더/라벨의 기본색 */
+  --term-accent: #ff8c1a;
+  --term-accent-dim: #b35e0f;
+
+  /* data semantics */
+  --term-up: #34e06a;          /* 상승 (밝은 초록) */
+  --term-down: #ff3b3b;        /* 하락 (빨강) */
+  --term-warn: #ffe23f;        /* 노랑 강조 */
+  --term-info: #38c6ff;        /* 시안 링크 */
+  --term-mag: #ff5cf0;         /* 마젠타 */
+
+  /* text */
+  --term-white: #f2eee2;       /* 값 (웜 화이트) */
+  --term-fg: #f2eee2;          /* 기본 데이터 텍스트 */
+  --term-muted: #cfc7b4;       /* 보조 라벨 (밝은 회색) */
+  --term-faint: #7d7563;       /* 비활성 / 단위 */
+}
+
+body {
+  background: var(--term-chrome);
+  color: var(--term-fg);
+  font-family: var(--font-mono, ui-monospace, "SF Mono", "Menlo", "Consolas",
+    monospace);
+  font-size: 11px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* ── Win95 입체 베벨 ───────────────────────────────────────── */
+.bevel {
+  box-shadow:
+    inset 1px 1px 0 var(--term-bevel-lt),
+    inset -1px -1px 0 var(--term-bevel-dk);
+}
+.bevel-in {
+  box-shadow:
+    inset 1px 1px 0 var(--term-bevel-dk),
+    inset -1px -1px 0 var(--term-bevel-lt);
+}
+button.bevel:active {
+  box-shadow:
+    inset 1px 1px 0 var(--term-bevel-dk),
+    inset -1px -1px 0 var(--term-bevel-lt);
+}
+
+/* glow는 이 레퍼런스(크리스프 LCD)엔 없음 — 무력화 (기존 클래스 호환용) */
+.term-glow { text-shadow: none; }
+
+/* terminal scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--term-chrome); }
+::-webkit-scrollbar-thumb {
+  background: var(--term-border);
+  box-shadow:
+    inset 1px 1px 0 var(--term-bevel-lt),
+    inset -1px -1px 0 var(--term-bevel-dk);
+}
+
+/* blinking cursor */
+@keyframes term-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.term-cursor::after {
+  content: "\2588";
+  color: var(--term-accent);
+  animation: term-blink 1.05s step-end infinite;
+}
+
+/* 티커 테이프 마퀴 */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 38s linear infinite;
+}

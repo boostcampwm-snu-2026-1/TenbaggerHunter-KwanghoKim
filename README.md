@@ -27,6 +27,17 @@ Tenbagger Hunter는 단순한 주식 스크리너가 아닙니다.
 
 ---
 
+## 📸 화면
+
+> Bloomberg Terminal 스타일 UI. 아래는 **mock 데이터** 기준이며 `npm run screenshots`로 재생성됩니다.
+
+| 🖥️ 랜딩 | 🔍 탐색 결과 | 📊 딥다이브 |
+|---|---|---|
+| [![랜딩](docs/screenshots/landing.png)](docs/screenshots/landing.png) | [![탐색 결과](docs/screenshots/search.png)](docs/screenshots/search.png) | [![딥다이브](docs/screenshots/deepdive.png)](docs/screenshots/deepdive.png) |
+| 자연어 테마 입력 + 추천 칩 | Tenbagger Score 카드 5~8개 | 5축 레이더 · 재무 · Bull/Bear/Verdict |
+
+---
+
 ## ✨ 기존 스크리너와 무엇이 다른가요?
 
 | 기존 스크리너 (Finviz, HTS) | **Tenbagger Hunter** |
@@ -143,20 +154,22 @@ Tenbagger Hunter는 단순한 주식 스크리너가 아닙니다.
 
 ## 🚦 시작하기
 
-> 🚧 현재 기획(PRD) 단계입니다. 코드는 Phase 1 진행과 함께 추가될 예정입니다.
+> ✅ Phase 1 (미국주 MVP) 구현 완료 — **키 없이 mock 모드로 바로 실행**됩니다.
 
 ```bash
-# (예정) 저장소 클론
 git clone https://github.com/boostcampwm-snu-2026-1/TenbaggerHunter-KwanghoKim.git
 cd TenbaggerHunter-KwanghoKim
-
-# (예정) 의존성 설치 & 환경 변수 설정
 npm install
-cp .env.example .env.local   # FMP / Claude / Supabase 키 입력
 
-# (예정) 개발 서버 실행
-npm run dev
+# mock 모드로 바로 실행 (외부 키 불필요)
+npm run dev          # → http://localhost:3000
+
+# 실 데이터로 쓰려면 .env.local 생성 후 키 입력:
+#   AI_PROVIDER=cli|api   # cli=Claude Code 구독 / api=Anthropic 키
+#   FMP_API_KEY=...       # 미국 재무 (무료 티어 250 req/day)
 ```
+
+> AI provider는 `mock`(기본) · `cli`(Claude 구독) · `api`(Anthropic 키) 3가지를 `AI_PROVIDER`로 전환합니다.
 
 ---
 
