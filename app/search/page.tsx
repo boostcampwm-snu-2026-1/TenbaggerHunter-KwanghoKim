@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Market } from "@/lib/types/stock";
 import { searchTheme } from "@/lib/discovery";
+import { parseCriteria } from "@/lib/discovery/criteria";
 import { CompanyCard } from "@/components/company-card";
 import { ThemeSearchForm } from "@/components/theme-search-form";
 import { Panel, Tag } from "@/components/terminal";
@@ -14,16 +15,17 @@ function normalizeMarket(v?: string): Market | "ALL" {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { theme?: string; market?: string };
+  searchParams: Record<string, string | undefined>;
 }) {
   const theme = searchParams.theme?.trim() ?? "";
   const market = normalizeMarket(searchParams.market);
+  const criteria = parseCriteria(searchParams);
 
   if (!theme) {
     return (
       <div className="mx-auto max-w-2xl">
         <Panel title="Theme Discovery" code="200) SCREEN">
-          <ThemeSearchForm />
+          <ThemeSearchForm initialCriteria={criteria} />
         </Panel>
       </div>
     );
@@ -32,7 +34,7 @@ export default async function SearchPage({
   let candidates;
   let error: string | null = null;
   try {
-    ({ candidates } = await searchTheme(theme, market));
+    ({ candidates } = await searchTheme(theme, market, criteria));
   } catch (e) {
     console.error("[search page]", e);
     error = "탐색 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
@@ -52,7 +54,7 @@ export default async function SearchPage({
             </span>
           }
         >
-          <ThemeSearchForm initialTheme={theme} />
+          <ThemeSearchForm initialTheme={theme} initialCriteria={criteria} />
         </Panel>
 
         <Panel

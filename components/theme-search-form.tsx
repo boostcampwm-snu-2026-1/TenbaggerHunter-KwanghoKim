@@ -3,6 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Market } from "@/lib/types/stock";
+import {
+  CRITERIA,
+  selectedBlurbs,
+  type CriterionId,
+  type SelectedCriteria,
+} from "@/lib/discovery/criteria";
 import { cn } from "@/lib/utils/cn";
 
 const SUGGESTED = [
@@ -18,16 +24,34 @@ const MARKETS: { value: Market | "ALL"; label: string }[] = [
   { value: "ALL", label: "ALL" },
 ];
 
-export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }) {
+export function ThemeSearchForm({
+  initialTheme = "",
+  initialCriteria = {},
+}: {
+  initialTheme?: string;
+  initialCriteria?: SelectedCriteria;
+}) {
   const router = useRouter();
   const [theme, setTheme] = useState(initialTheme);
   const [market, setMarket] = useState<Market | "ALL">("US");
+  const [criteria, setCriteria] = useState<SelectedCriteria>(initialCriteria);
+
+  function toggle(id: CriterionId, value: string) {
+    setCriteria((prev) => ({ ...prev, [id]: prev[id] === value ? undefined : value }));
+  }
 
   function go(t: string) {
     const q = t.trim();
     if (!q) return;
-    router.push(`/search?theme=${encodeURIComponent(q)}&market=${market}`);
+    const params = new URLSearchParams({ theme: q, market });
+    for (const c of CRITERIA) {
+      const v = criteria[c.id];
+      if (v) params.set(c.id, v);
+    }
+    router.push(`/search?${params.toString()}`);
   }
+
+  const blurbs = selectedBlurbs(criteria);
 
   return (
     <div className="space-y-1.5">
@@ -59,7 +83,7 @@ export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }
       </form>
 
       <div className="flex items-center gap-1 text-[10px]">
-        <span className="text-term-faint">MKT</span>
+        <span className="w-9 shrink-0 text-term-faint">MKT</span>
         {MARKETS.map((m) => (
           <button
             key={m.value}
@@ -75,6 +99,34 @@ export function ThemeSearchForm({ initialTheme = "" }: { initialTheme?: string }
           </button>
         ))}
       </div>
+
+      {CRITERIA.map((c) => (
+        <div key={c.id} className="flex items-center gap-1 text-[10px]">
+          <span className="w-9 shrink-0 text-term-faint">{c.code}</span>
+          {c.options.map((o) => (
+            <button
+              key={o.value}
+              type="button"
+              title={o.blurb}
+              onClick={() => toggle(c.id, o.value)}
+              className={cn(
+                "bevel px-1.5 py-px font-bold tracking-wide",
+                criteria[c.id] === o.value
+                  ? "bg-term-accent text-black"
+                  : "bg-term-chrome text-term-muted hover:text-term-white",
+              )}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      ))}
+
+      {blurbs.length > 0 && (
+        <div className="truncate pt-0.5 text-[10px] text-term-faint">
+          <span className="text-term-accent">PROFILE</span> · {blurbs.join(" · ")}
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-1 pt-0.5">
         {SUGGESTED.map((s) => (

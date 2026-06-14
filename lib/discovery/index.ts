@@ -16,6 +16,7 @@ import {
   buildThemeSearchUser,
   themeSearchSchema,
 } from "@/lib/ai/prompts/theme-search";
+import { criteriaKey, type SelectedCriteria } from "@/lib/discovery/criteria";
 import {
   DEEPDIVE_SYSTEM,
   buildDeepDiveUser,
@@ -44,6 +45,7 @@ function axesFrom(qual: Omit<ScoreAxes, "financials">, financialsScore: number):
 export async function searchTheme(
   theme: string,
   market: Market | "ALL",
+  criteria: SelectedCriteria = {},
 ): Promise<ThemeSearchResponse> {
   if (isMock()) {
     const pool = market === "KR" ? [] : MOCK_COMPANIES; // Phase 1은 미국주만
@@ -55,8 +57,8 @@ export async function searchTheme(
     return { theme, candidates };
   }
 
-  return cached(`search:${market}:${theme}`, TTL.aiAnalysis, async () => {
-    const raw = await completeJSON<unknown>(buildThemeSearchUser(theme, market), {
+  return cached(`search:${market}:${theme}:${criteriaKey(criteria)}`, TTL.aiAnalysis, async () => {
+    const raw = await completeJSON<unknown>(buildThemeSearchUser(theme, market, criteria), {
       system: THEME_SEARCH_SYSTEM,
       model: DEFAULT_MODEL,
       temperature: 0.7,
