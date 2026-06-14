@@ -1,4 +1,5 @@
 import { Panel, ColHead } from "@/components/terminal";
+import { InvestorWisdom } from "@/components/terminal/wisdom";
 
 /** 딥다이브 로딩 — DES 화면과 동일한 패널 구조를 term 토큰 스켈레톤으로 채운다. */
 export default function CompanyLoading() {
@@ -21,6 +22,9 @@ export default function CompanyLoading() {
           </div>
         </div>
       </Panel>
+
+      {/* 로딩 동안 투자 명언 회전 */}
+      <InvestorWisdom />
 
       {/* radar + financials */}
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2">

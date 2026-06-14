@@ -1,4 +1,5 @@
 import { Panel } from "@/components/terminal";
+import { InvestorWisdom } from "@/components/terminal/wisdom";
 
 /** 검색 결과 로딩 — 스켈레톤 행을 term 토큰/베벨로 채워 결과 화면과 동일한 레이아웃을 유지한다. */
 function SkeletonRow() {
@@ -51,7 +52,8 @@ export default function SearchLoading() {
             </div>
           </div>
         </Panel>
-        <Panel title="Legend" code="HELP" className="flex-1">
+        <InvestorWisdom className="flex-1" />
+        <Panel title="Legend" code="HELP">
           <div className="space-y-0.5 text-[10px] text-term-muted">
             <div><span className="text-term-up">SCORE ≥ 75</span> — 강력 후보</div>
             <div><span className="text-term-accent">55–74</span> — 관찰 후보</div>
