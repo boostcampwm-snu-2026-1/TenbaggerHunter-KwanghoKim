@@ -16,14 +16,23 @@ import {
   buildThemeSearchUser,
   themeSearchSchema,
 } from "@/lib/ai/prompts/theme-search";
-import { SCORE_SYSTEM, buildScoreUser, scoreSchema } from "@/lib/ai/prompts/score";
 import {
-  BULL_BEAR_SYSTEM,
-  buildBullBearUser,
-  bullBearSchema,
-} from "@/lib/ai/prompts/bull-bear";
+  DEEPDIVE_SYSTEM,
+  buildDeepDiveUser,
+  deepDiveSchema,
+} from "@/lib/ai/prompts/deepdive";
 
 const isMock = () => resolveProviderName() === "mock";
+
+/**
+ * AI가 반환한 ticker의 형식 sanity 검증 (FMP 호출 0회 — 쿼터 소모 없음).
+ * 거래소 심볼 규칙: 영문 대문자 1~5자, 클래스주 접미사(.A/.B) 허용.
+ * AI 환각으로 섞여 들어오는 설명문·소문자·공백·과길이 심볼을 검색 단계에서 걸러낸다.
+ * (실존 여부 검증은 비용이 드는 딥다이브의 getProfile에 위임 — 위 트레이드오프 주석 참고)
+ */
+function isValidTickerFormat(ticker: string): boolean {
+  return /^[A-Z]{1,5}(\.[A-Z]{1,2})?$/.test(ticker.trim());
+}
 
 /** 정성 축(0~100) + 재무에서 5축 점수 구성. */
 function axesFrom(qual: Omit<ScoreAxes, "financials">, financialsScore: number): ScoreAxes {
@@ -52,7 +61,17 @@ export async function searchTheme(
       model: DEFAULT_MODEL,
       temperature: 0.7,
     });
-    const { candidates } = themeSearchSchema.parse(raw);
+    const { candidates: rawCandidates } = themeSearchSchema.parse(raw);
+
+    // AI 환각 ticker 거르기 (US 한정 — KR은 숫자 코드라 형식이 다름). FMP 호출 0회.
+    const candidates =
+      market === "KR"
+        ? rawCandidates
+        : rawCandidates.filter((c) => {
+            const ok = isValidTickerFormat(c.ticker);
+            if (!ok) console.warn(`[discovery] drop invalid ticker: ${JSON.stringify(c.ticker)}`);
+            return ok;
+          });
 
     // 트레이드오프: 리스트는 "예비 점수"만 계산한다.
     // 후보별 FMP 실 재무 호출(getFinancials)을 하지 않는다 — FMP 무료 티어 250 req/day인데
@@ -102,24 +121,19 @@ export async function getDeepDive(ticker: string): Promise<CompanyDeepDive | nul
     if (!profile) return null;
     const financials = (await getFinancials(ticker)) ?? {};
 
-    const [qualRaw, analysisRaw] = await Promise.all([
-      completeJSON<unknown>(buildScoreUser(profile, financials), {
-        system: SCORE_SYSTEM,
-        temperature: 0.3,
-      }),
-      completeJSON<unknown>(buildBullBearUser(profile, financials), {
-        system: BULL_BEAR_SYSTEM,
-        temperature: 0.5,
-      }),
-    ]);
+    // 정성 점수 + Bull/Bear/Verdict를 한 번의 AI 호출로 생성 (기존 2콜 → 1콜).
+    const raw = await completeJSON<unknown>(buildDeepDiveUser(profile, financials), {
+      system: DEEPDIVE_SYSTEM,
+      temperature: 0.4,
+    });
+    const d = deepDiveSchema.parse(raw);
 
-    const q = scoreSchema.parse(qualRaw);
-    const analysis = bullBearSchema.parse(analysisRaw);
+    const analysis = { bull: d.bull, bear: d.bear, verdict: d.verdict };
     const qual = {
-      tam: normalizeQualitative(q.tam),
-      moat: normalizeQualitative(q.moat),
-      management: normalizeQualitative(q.management),
-      narrative: normalizeQualitative(q.narrative),
+      tam: normalizeQualitative(d.tam),
+      moat: normalizeQualitative(d.moat),
+      management: normalizeQualitative(d.management),
+      narrative: normalizeQualitative(d.narrative),
     };
 
     return {

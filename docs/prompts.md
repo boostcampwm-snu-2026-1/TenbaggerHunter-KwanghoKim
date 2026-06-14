@@ -7,13 +7,10 @@
 - **v1** (2026-06-02) — 최초. 자연어 테마 → 상장사 5~8개 + 정성 축(tam/moat/management/narrative, 1~10) + oneLiner(한국어, 수치 근거 지향). JSON-only. 대형주 편중 방지·비단정 서술 지시.
   - 파일: [lib/ai/prompts/theme-search.ts](../lib/ai/prompts/theme-search.ts)
 
-## score (정성 축 평가)
-- **v1** (2026-06-02) — 최초. 재무 축은 정량 계산(`lib/score`)으로 분리하고, AI는 tam/moat/management/narrative 4개 축만 1~10로 평가. 근거 기반 냉정 평가 지시.
-  - 파일: [lib/ai/prompts/score.ts](../lib/ai/prompts/score.ts)
-
-## bull-bear (Bull/Bear/Verdict)
-- **v1** (2026-06-02) — 최초. Bull 3 / Bear 3 / Verdict(investorType + Risk-Reward 서술). 단정적 매수·매도 금지, 투자 권유 아님 명시 (체크포인트 3.4).
-  - 파일: [lib/ai/prompts/bull-bear.ts](../lib/ai/prompts/bull-bear.ts)
+## deepdive (정성 축 + Bull/Bear/Verdict 통합)
+- **v1** (2026-06-14) — `score` v1 + `bull-bear` v1 통합. 동일 입력(profile+financials)으로 2회 호출하던 것을 1회로 합쳐 딥다이브당 API 비용·지연 절반. AI는 정성 4축(tam/moat/management/narrative, 1~10)과 Bull 3/Bear 3/Verdict를 한 JSON으로 반환. 재무 축은 여전히 정량 계산(`lib/score`)으로 분리. 단정적 매수·매도 금지·투자 권유 아님 유지 (체크포인트 3.4). temperature 0.4.
+  - 파일: [lib/ai/prompts/deepdive.ts](../lib/ai/prompts/deepdive.ts)
+- ~~score v1 / bull-bear v1~~ (2026-06-02) — deepdive v1로 통합되며 제거.
 
 ---
 
